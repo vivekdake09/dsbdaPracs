@@ -99,19 +99,37 @@ open terminal and follow following commands:
 
 
 //theory
- Purpose of the Project
-The objective is to design a distributed application using Hadoop MapReduce in Java that analyzes a log file (like an access log) and counts the number of times each IP address appears. This can help determine which users (represented by IPs) accessed the system the most.
+Purpose of the Code (in simple words)
+This code is written using MapReduce (a method used in Hadoop, a system for handling big data). The purpose of this code is:
 
-📘 Line-by-Line Code Explanation
-Package and Imports
+To read a system log file and count how many times each user (or IP address) has appeared (logged in). It shows which IP address used the system most.
+
+This is a first step in solving the goal:
+
+"List out users who logged in for the maximum period."
+We first count how often each user/IP appeared, and from that we can assume who's logged in the most.
+
+📄 Full Code Explanation (Line by Line, in kid-friendly language)
 java
 Copy
 Edit
 package prac3;
+👉 This line says: "I’m putting this code in a folder/package called prac3."
 
+java
+Copy
+Edit
 import java.io.IOException;
 import java.util.StringTokenizer;
+👉 We're using some tools:
 
+IOException handles errors when reading files.
+
+StringTokenizer helps break a sentence into words.
+
+java
+Copy
+Edit
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
@@ -121,86 +139,113 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
-package prac3;: Declares the Java package.
+👉 These are Hadoop tools we use to:
 
-import ...: Brings in necessary Hadoop and Java classes for file I/O, data types, MapReduce, etc.
+Create jobs,
 
-Main Class Declaration
+Read input files, and
+
+Write output files.
+
+🔷 Mapper Class
 java
 Copy
 Edit
-public class Process {
-Defines the main class Process.
-
-🔹 Mapper Class
-java
-Copy
-Edit
-  public static class IPMapper extends Mapper<Object, Text, Text, IntWritable>{
-IPMapper: Custom Mapper class.
-
-Mapper<KEYIN, VALUEIN, KEYOUT, VALUEOUT>: It takes a line (Text) as input and outputs (IP, 1).
+public static class IPMapper extends Mapper<Object, Text, Text, IntWritable>{
+👉 We are creating a part of the program called IPMapper (a Mapper). It takes each line of the log file and does something with it.
 
 java
 Copy
 Edit
     private final static IntWritable one = new IntWritable(1);
     private Text ip = new Text();
-Defines the constant value "1" for each IP occurrence.
+👉 These lines set up:
 
-ip is the key emitted by the Mapper.
+one → means “count this as 1 time.”
+
+ip → we will store the IP address in it.
 
 java
 Copy
 Edit
     public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
+👉 This function will run for every line in the file.
+
+java
+Copy
+Edit
       StringTokenizer itr = new StringTokenizer(value.toString());
+👉 It breaks the line into words (tokens).
+
+java
+Copy
+Edit
       if (itr.hasMoreTokens()) {
         ip.set(itr.nextToken());
         context.write(ip, one);
       }
-    }
-Splits each line by whitespace using StringTokenizer.
+👉 If the line has something:
 
-Assumes the first token is the IP address.
+Take the first word (assumed to be an IP),
 
-Emits (IP, 1) for each line.
+Save it in ip,
 
-🔹 Reducer Class
+Tell Hadoop: “I found this IP, count it as 1.”
+
+🔶 Reducer Class
 java
 Copy
 Edit
-  public static class IntSumReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
-    private IntWritable result = new IntWritable();
-Reducer<KEYIN, VALUEIN, KEYOUT, VALUEOUT>: Receives (IP, [1,1,1,...]) and outputs (IP, count).
+public static class IntSumReducer extends Reducer<Text,IntWritable,Text,IntWritable> {
+👉 Now we create the Reducer, which will add up all the 1s for each IP.
 
-result: Stores the total count.
+java
+Copy
+Edit
+    private IntWritable result = new IntWritable();
+👉 We create a place to store the final number.
 
 java
 Copy
 Edit
     public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
+👉 This function gets called for each IP address.
+
+java
+Copy
+Edit
       int sum = 0;
       for (IntWritable val : values) {
         sum += val.get();
       }
-      result.set(sum);
-      context.write(key, result);
-    }
-Sums up all the 1s associated with each IP.
+👉 Add up all the 1s for this IP.
 
-Outputs (IP, total count).
-
-🔹 Driver Code (main method)
 java
 Copy
 Edit
-  public static void main(String[] args) throws Exception {
-    Configuration conf = new Configuration();
-    Job job = Job.getInstance(conf, "IP address count");
-Creates Hadoop job configuration.
+      result.set(sum);
+      context.write(key, result);
+👉 Save and write the result like:
+192.168.1.1 → 5
 
-Names the job "IP address count".
+🔸 Main Method
+java
+Copy
+Edit
+public static void main(String[] args) throws Exception {
+👉 This is where the program starts running.
+
+java
+Copy
+Edit
+    Configuration conf = new Configuration();
+👉 Set up the Hadoop configuration.
+
+java
+Copy
+Edit
+    Job job = Job.getInstance(conf, "IP address count");
+👉 Create a job called “IP address count”.
 
 java
 Copy
@@ -209,31 +254,72 @@ Edit
     job.setMapperClass(IPMapper.class);
     job.setCombinerClass(IntSumReducer.class);
     job.setReducerClass(IntSumReducer.class);
-Sets the main class, Mapper, Combiner, and Reducer classes.
+👉 Tell Hadoop which classes to use:
+
+Mapper
+
+Combiner (does quick addition before Reduce)
+
+Reducer
 
 java
 Copy
 Edit
     job.setOutputKeyClass(Text.class);
     job.setOutputValueClass(IntWritable.class);
-Specifies output types for Mapper/Reducer.
+👉 Say what kind of data we are outputting:
+
+Key → text (IP address)
+
+Value → integer (count)
 
 java
 Copy
 Edit
     FileInputFormat.addInputPath(job, new Path(args[0]));
     FileOutputFormat.setOutputPath(job, new Path(args[1]));
-Takes input and output paths from command line arguments.
+👉 Get the input and output file paths from user input.
 
 java
 Copy
 Edit
     System.exit(job.waitForCompletion(true) ? 0 : 1);
-  }
-}
-Submits the job and exits depending on success/failure.
+👉 Start the job and exit when done.
 
-❓ Viva Questions and Answers
+✅ Sample Output
+Copy
+Edit
+192.168.0.1	5
+192.168.0.2	3
+10.0.0.1	7
+👉 This means:
+
+IP 10.0.0.1 appeared 7 times (used most).
+
+🧠 Viva Questions & Answers (Simple)
+Q1: What is the purpose of this MapReduce program?
+A: It counts how many times each IP address appears in the log file.
+
+Q2: What does the Mapper do?
+A: It reads each line, takes the first word (IP address), and gives it a value of 1.
+
+Q3: What does the Reducer do?
+A: It adds all the 1s for each IP and gives the total number of times that IP appeared.
+
+Q4: What is the role of Combiner here?
+A: It helps to reduce the work of the Reducer by adding values early (optional mini-reducer).
+
+Q5: What data types are used for key and value?
+A: Key is Text (IP address) and Value is IntWritable (number).
+
+Q6: How is this useful in log file analysis?
+A: It helps us find out which user (IP) used the system the most.
+
+Q7: What is Hadoop used for?
+A: Hadoop is used for processing and storing very large data using many computers.
+
+Q8: Can this code run on one computer?
+A: Yes, in pseudo-distributed mode (one computer behaves like a mini-Hadoop system).
 Question	Answer
 What is MapReduce?	A programming model for processing large data sets with a distributed algorithm on a cluster.
 What is the role of a Mapper?	It processes input data line by line and outputs intermediate key-value pairs.
