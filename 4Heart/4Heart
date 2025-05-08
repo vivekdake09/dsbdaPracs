@@ -127,7 +127,7 @@ df.isna().sum() — Checks for missing (null) values in each column.
 
 b) Data Integration
 
-df.fbs.unique() — Shows all unique values in the 'fbs' column.
+df.fbs.unique() — Shows all unique values in the 'fbsasting blood sugar' column.
 
 df1 = df[['age','cp','chol','thalachh']] — Creates first subset of selected columns.
 
