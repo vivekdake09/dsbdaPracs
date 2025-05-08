@@ -1,0 +1,201 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+
+df2=pd.read_excel('airquality_data.xlsx')
+
+
+df2.head()
+
+
+df2.columns
+
+
+sns.barplot(x='state',y='so2',data=df2)
+
+# Rotate x-axis labels for better visibility
+plt.xticks(rotation=90)
+
+# Show the plot
+plt.show()
+
+
+
+sns.barplot(x='state',y='so2',data=df2,estimator=np.std)
+
+# Rotate x-axis labels for better visibility
+plt.xticks(rotation=90)
+
+# Show the plot
+plt.show()
+
+
+
+# Count Plot
+sns.countplot(x='state',data=df2)
+
+# Rotate x-axis labels for better visibility
+plt.xticks(rotation=90)
+
+# Show the plot
+plt.show()
+
+
+
+# Box Plot
+sns.boxplot(x='state',y='so2',data=df2)
+
+# Rotate x-axis labels for better visibility
+plt.xticks(rotation=90)
+
+# Show the plot
+plt.show()
+
+
+
+# Violin Plot
+sns.violinplot(x='state',y='so2',data=df2)
+
+# Rotate x-axis labels for better visibility
+plt.xticks(rotation=90)
+
+# Show the plot
+plt.show()
+
+
+
+sns.distplot(x=df2['no2'],bins=10)
+
+
+
+sns.distplot(df2['so2'],bins=10,kde=False)
+
+
+
+# For Plot 1
+sns.jointplot(x=df2['so2'],y=df2['state'],kind='scatter')
+
+
+
+sns.rugplot(df2['so2'])
+
+
+#  Strip Plot
+sns.stripplot(y='so2',x='state',data=df2,jitter= False)
+
+# Rotate x-axis labels for better visibility
+plt.xticks(rotation=90)
+
+# Show the plot
+plt.show()
+
+
+
+
+//therory
+Task: Data Visualization – Air Quality Dataset
+
+1. Importing required libraries:
+We start by importing libraries:
+
+numpy is used for numerical operations.
+
+pandas helps to handle tabular data.
+
+matplotlib.pyplot and seaborn are used for creating various types of plots.
+
+2. Reading the dataset:
+We read the air quality dataset from an Excel file using pd.read_excel(). We store it in a variable df2.
+Then we use df2.head() to view the first 5 rows and df2.columns to check all column names.
+
+3. Bar Plot – Average SO2 per State:
+We create a bar plot where the x-axis shows the states and the y-axis shows average SO2 levels using sns.barplot().
+To make the state names readable, we rotate the x-axis labels by 90 degrees using plt.xticks(rotation=90).
+
+4. Bar Plot – Standard Deviation of SO2 per State:
+We plot the standard deviation of SO2 values across states using the same barplot function but adding estimator=np.std to calculate standard deviation instead of mean.
+
+5. Count Plot – Number of Records per State:
+Using sns.countplot(), we display how many data entries each state has. It simply counts the occurrences of each category.
+
+6. Box Plot – SO2 Values by State:
+A box plot shows the median value, quartiles, and possible outliers in the SO2 data for each state. It helps detect unusual or extreme values.
+
+7. Violin Plot – SO2 by State:
+A violin plot shows the distribution of SO2 values per state. It looks like a symmetrical curve and combines features of a box plot and a density plot (KDE).
+
+8. Distribution Plot of NO2:
+We create a histogram of NO2 values using sns.distplot() with 10 bins. This plot shows how NO2 values are spread or distributed.
+
+9. Distribution Plot of SO2 without KDE:
+This is similar to the above, but KDE (smooth curve) is turned off, so it shows just the histogram.
+
+10. Joint Plot – SO2 vs State:
+We use sns.jointplot() to make a scatter plot of SO2 values against states. It also includes small histograms on the axes to show the marginal distributions.
+
+11. Rug Plot – SO2:
+This plot shows small lines (ticks) along the x-axis, each representing one SO2 value. It's useful for visualizing data concentration in certain areas.
+
+12. Strip Plot – SO2 by State:
+A strip plot shows all individual SO2 values per state using dots. With jitter=False, the points are plotted directly on top of each other if they have the same value.
+
+Important Keywords and Their Meanings:
+
+Bar Plot – Shows the average or any custom summary (like std dev) of a numerical value per category.
+
+Count Plot – Displays how many times each category occurs.
+
+Box Plot – Summarizes data with median, quartiles, and outliers.
+
+Violin Plot – Combines box plot and distribution curve (KDE).
+
+Distribution Plot – Shows how a single numeric variable is spread.
+
+Joint Plot – Combines scatter plot with histograms on top and side.
+
+Rug Plot – Shows every data point as a tick on one axis.
+
+Strip Plot – Plots all individual data points per category.
+
+KDE (Kernel Density Estimation) – A smooth curve that estimates the probability distribution of a variable.
+
+Viva Questions and Answers:
+
+What is the use of bar plot?
+A bar plot shows the average (or any other summary) of a numerical column for different categories like states.
+
+What does estimator=np.std mean in bar plot?
+It changes the default behavior from showing average to showing standard deviation for each category.
+
+What is the difference between box plot and violin plot?
+Box plot shows summary stats like median and outliers, while violin plot adds a smooth density curve to show the shape of the distribution.
+
+Why is plt.xticks(rotation=90) used?
+It rotates the labels on the x-axis to avoid overlapping and make them readable.
+
+What does a count plot show?
+It shows the number of times each category appears in the data.
+
+Why is kde=False used in distplot?
+It removes the density curve and only shows the histogram.
+
+What is a rug plot?
+A rug plot marks the actual position of each data point along the axis.
+
+What is the purpose of joint plot?
+It helps visualize the relationship between two variables and their individual distributions.
+
+What does jitter do in stripplot?
+Jitter spreads out overlapping points to make them visible instead of stacking them on top of each other.
+
+
+
+
+
+
+
+
+
+
