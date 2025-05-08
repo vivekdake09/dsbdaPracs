@@ -95,6 +95,88 @@ plt.show()
 
 
 //therory
+
+1. Bar Plot (sns.barplot)
+python
+Copy
+Edit
+sns.barplot(x='state', y='so2', data=df2)
+Purpose:
+To compare the average SO₂ (Sulphur Dioxide) levels across different states.
+
+2. Bar Plot with Standard Deviation
+python
+Copy
+Edit
+sns.barplot(x='state', y='so2', data=df2, estimator=np.std)
+Purpose:
+To see the variation or spread (standard deviation) of SO₂ levels in each state.
+
+3. Count Plot (sns.countplot)
+python
+Copy
+Edit
+sns.countplot(x='state', data=df2)
+Purpose:
+To count how many data entries exist for each state – shows sampling distribution.
+
+4. Box Plot (sns.boxplot)
+python
+Copy
+Edit
+sns.boxplot(x='state', y='so2', data=df2)
+Purpose:
+To analyze the distribution, median, quartiles, and outliers of SO₂ levels per state.
+
+5. Violin Plot (sns.violinplot)
+python
+Copy
+Edit
+sns.violinplot(x='state', y='so2', data=df2)
+Purpose:
+To show both the distribution (KDE) and summary statistics of SO₂ per state.
+
+6. Distribution Plot (NO₂)
+python
+Copy
+Edit
+sns.distplot(x=df2['no2'], bins=10)
+Purpose:
+To visualize the distribution (histogram + KDE) of NO₂ (Nitrogen Dioxide) values.
+
+7. Histogram (SO₂)
+python
+Copy
+Edit
+sns.distplot(df2['so2'], bins=10, kde=False)
+Purpose:
+To show a frequency distribution (only histogram) of SO₂ values.
+
+8. Joint Plot
+python
+Copy
+Edit
+sns.jointplot(x=df2['so2'], y=df2['state'], kind='scatter')
+Purpose:
+Although not ideal with categorical y-axis, intended to show relationship between SO₂ and states.
+
+9. Rug Plot
+python
+Copy
+Edit
+sns.rugplot(df2['so2'])
+Purpose:
+To show individual data points for SO₂ along the axis – useful for spotting clusters.
+
+10. Strip Plot
+python
+Copy
+Edit
+sns.stripplot(y='so2', x='state', data=df2, jitter=False)
+Purpose:
+To display all individual SO₂ readings per state clearly, revealing spread and density.
+
+
 Task: Data Visualization – Air Quality Dataset
 
 1. Importing required libraries:
