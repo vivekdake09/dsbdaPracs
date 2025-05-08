@@ -1,0 +1,98 @@
+Step 1:
+Project create practical3 > package create with prac3 >  class  create Process 
+
+Step 2:
+code copy paste :
+package prac3;
+
+import java.io.IOException;
+import java.util.StringTokenizer;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.Mapper;
+import org.apache.hadoop.mapreduce.Reducer;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+
+public class Process {
+
+  public static class IPMapper
+       extends Mapper<Object, Text, Text, IntWritable>{
+
+    private final static IntWritable one = new IntWritable(1);
+    private Text ip = new Text();
+
+    public void map(Object key, Text value, Context context
+                    ) throws IOException, InterruptedException {
+      // Assuming the IP address is the first token in each line
+      StringTokenizer itr = new StringTokenizer(value.toString());
+      if (itr.hasMoreTokens()) {
+        ip.set(itr.nextToken());
+        context.write(ip, one);
+      }
+    }
+  }
+
+  public static class IntSumReducer
+       extends Reducer<Text,IntWritable,Text,IntWritable> {
+    private IntWritable result = new IntWritable();
+
+    public void reduce(Text key, Iterable<IntWritable> values,
+                       Context context
+                       ) throws IOException, InterruptedException {
+      int sum = 0;
+      for (IntWritable val : values) {
+        sum += val.get();
+      }
+      result.set(sum);
+      context.write(key, result);
+    }
+  }
+
+  public static void main(String[] args) throws Exception {
+    Configuration conf = new Configuration();
+    Job job = Job.getInstance(conf, "IP address count");
+    job.setJarByClass(Process.class);
+    job.setMapperClass(IPMapper.class);
+    job.setCombinerClass(IntSumReducer.class);
+    job.setReducerClass(IntSumReducer.class);
+    job.setOutputKeyClass(Text.class);
+    job.setOutputValueClass(IntWritable.class);
+    FileInputFormat.addInputPath(job, new Path(args[0]));
+    FileOutputFormat.setOutputPath(job, new Path(args[1]));
+    System.exit(job.waitForCompletion(true) ? 0 : 1);
+  }
+
+
+Step 3:
+2 jar files import  : 
+(1) right click project > build path > add external archives > file system > usr/lib/hadoop -> hadoop-common-2.6.0-cdh5.13.0.jar
+
+(2) right click project > build path > add external archives > file system > usr/lib/hadoop-0.20-mapreduce
+
+Step 4:
+Copy logfile  from url : https://mapreduceprogram.blogspot.com
+
+Step 5:
+create document empty on desktop 
+
+Step 6:
+open terminal and follow following commands:
+(1) pwd
+
+(2) cd ../
+
+(3) pwd
+
+(4) hadoop fs -put Desktop/log.txt log.txt
+
+(5)  hadoop jar Process.jar prac3.Process log.txt dir16
+
+(6) hadoop fs -cat dir16/part-r-00000
+
+
+
