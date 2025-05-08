@@ -179,6 +179,113 @@ The model is trained and tested similarly.
 
 Accuracy, confusion matrix, and classification report for the decision tree are printed.
 
+
+Precision
+Definition:
+
+Precision tells how many of the predicted positives were actually correct.
+
+Formula:
+
+Precision
+=
+True Positives (TP)
+True Positives (TP)
++
+False Positives (FP)
+Precision= 
+True Positives (TP)+False Positives (FP)
+True Positives (TP)
+​
+ 
+🧠 Example: If a model predicts 10 people have a disease, but only 6 really do → Precision = 6/10 = 0.6
+
+✅ Recall (a.k.a. Sensitivity or True Positive Rate)
+Definition:
+
+Recall tells how many of the actual positives were correctly predicted.
+
+Formula:
+
+Recall
+=
+True Positives (TP)
+True Positives (TP)
++
+False Negatives (FN)
+Recall= 
+True Positives (TP)+False Negatives (FN)
+True Positives (TP)
+​
+ 
+🧠 Example: Out of 8 real patients with a disease, if the model finds 6 → Recall = 6/8 = 0.75
+
+✅ F1-Score
+Definition:
+
+F1-score is the harmonic mean of precision and recall; it balances both.
+
+Formula:
+
+F1 Score
+=
+2
+×
+Precision
+×
+Recall
+Precision
++
+Recall
+F1 Score=2× 
+Precision+Recall
+Precision×Recall
+​
+ 
+🧠 Use it when you want a balance between Precision and Recall (e.g., fraud detection, medical diagnoses).
+
+✅ Support
+Definition:
+
+Support is the number of actual instances of each class in the dataset.
+
+Would you like a table showing how these metrics are calculated from a confusion matrix?
+
+
+
+
+
+
+
+You said:
+what is decistion tree classifier 
+
+
+ChatGPT said:
+A Decision Tree Classifier is a machine learning algorithm used for classifying data into categories or labels by learning decision rules from the data.
+
+✅ Simple Definition:
+A Decision Tree Classifier splits the data into smaller and smaller parts using if-else conditions, just like how a flowchart or real-life decisions work.
+
+🧠 Real-Life Example:
+Imagine you're trying to decide what to wear:
+
+Is it raining?
+
+Yes → Take an umbrella.
+
+No → Is it cold?
+
+Yes → Wear a jacket.
+
+No → T-shirt is fine.
+
+This is a decision tree!
+
+✅ In Machine Learning:
+Each internal node tests a condition (like age > 50),
+Each branch is the outcome (yes/no),
+Each leaf node is a final class label (like "has heart disease" or "no heart disease").
 📚 Viva Questions and Answers
 Q1. What is the goal of this project?
 A. To predict whether a person has heart disease using machine learning models.
