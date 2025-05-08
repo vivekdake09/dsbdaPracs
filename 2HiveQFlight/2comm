@@ -62,3 +62,85 @@ FROM flight
 WHERE year = 2008
 GROUP BY flight_date
 ORDER BY flight_date;
+
+
+
+
+//theroy
+3. Creating a Table with File-Based Format
+sql
+Copy
+Edit
+CREATE TABLE flight(fno int, year int, dest varchar(10), delay float, flight_date varchar(10))
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+STORED AS TEXTFILE;
+Purpose: Creates a table flight to load data from a text file where:
+
+Fields are comma-separated
+
+Each row ends with a newline
+
+Data is stored as plain text
+
+
+
+
+5. Creating an External Table
+sql
+Copy
+Edit
+CREATE EXTERNAL TABLE nflight(fno int, year int, source varchar(10))
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+STORED AS TEXTFILE;
+Purpose: Creates an external table nflight, meaning Hive will not delete the underlying data when the table is dropped.
+
+8. Creating an Index
+sql
+Copy
+Edit
+CREATE INDEX flight_index ON TABLE flight(fno)
+AS 'org.apache.hadoop.hive.ql.index.compact.CompactIndexHandler'
+WITH DEFERRED REBUILD;
+Purpose: Creates a compact index on the fno column for faster search. WITH DEFERRED REBUILD means the index won't be built until explicitly done later.
+
+sql
+Copy
+Edit
+SHOW TABLES;
+Purpose: Lists all tables in the current database.
+
+📊 9. Aggregation Query
+sql
+Copy
+Edit
+SELECT flight_date, AVG(delay) AS avg_departure_delay
+FROM flight
+WHERE year = 2008
+GROUP BY flight_date
+ORDER BY flight_date;
+Purpose:
+
+Filters flights from the year 2008
+
+Groups by flight_date
+
+Calculates average delay for each date
+
+Orders the result by date
+
+🎓 Viva Questions & Answers
+Question	Answer
+What is Hive?	Hive is a data warehouse tool for managing large datasets in Hadoop using SQL-like queries.
+Difference between internal and external table in Hive?	Internal tables manage both data and metadata; deleting the table deletes the data. External tables only manage metadata.
+What is the use of LOAD DATA LOCAL?	It loads a local file into a Hive table.
+What is the use of ROW FORMAT DELIMITED?	It tells Hive how the data is formatted in the file.
+Why do we create indexes in Hive?	To improve the performance of queries by allowing faster lookup of rows.
+What is the use of GROUP BY and ORDER BY in Hive?	GROUP BY groups data for aggregation. ORDER BY sorts the result set.
+What happens when you drop an external table?	The table is removed from Hive metadata, but the actual data remains.
+Can you rename a Hive table?	Yes, using ALTER TABLE old_name RENAME TO new_name;.
+What is WITH DEFERRED REBUILD?	It creates the index structure but delays building it until needed.
+How do you load CSV data into Hive?	By creating a table with FIELDS TERMINATED BY ',' and using LOAD DATA.
