@@ -174,6 +174,34 @@ R² Score: Shows how well the model explains the variability in the data.
 A scatter plot is drawn to show the actual vs predicted NO2 values using matplotlib.
 
 🎓 VIVA QUESTIONS & ANSWERS
+
+Mean Squared Error (MSE)
+What it is: It measures how far off your model’s predictions are from the actual values.
+
+How it works:
+
+For each prediction, it calculates the difference from the actual value.
+
+It squares those differences (to remove negatives and give more weight to larger errors).
+
+Then it takes the average of all those squared errors.
+
+📌 Lower MSE = Better model
+
+Think of it like: "How badly am I guessing?"
+
+✅ R² Score (R-squared or Coefficient of Determination)
+What it is: It measures how well your model fits the data.
+
+Range: Between 0 and 1
+
+0 means: The model does not explain anything.
+
+1 means: The model perfectly explains the data.
+
+📌 Closer to 1 = Better fit
+
+Think of it like: "How much of the variation in NO₂ can I explain using SO₂?"
 Q1. Why did you use dropna(thresh=...)?
 A. To drop rows with more than 2 missing values while retaining usable data.
 
