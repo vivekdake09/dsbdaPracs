@@ -172,6 +172,81 @@ Mean Squared Error (MSE): Measures prediction error.
 R² Score: Shows how well the model explains the variability in the data.
 
 A scatter plot is drawn to show the actual vs predicted NO2 values using matplotlib.
+🔢 Code:
+python
+Copy
+Edit
+plt.scatter(X_test, y_test, color='purple', label='Actual NO2')
+📌 Explanation:
+
+This plots the actual NO₂ values as purple dots.
+
+X_test: SO₂ values (x-axis)
+
+y_test: Actual NO₂ values (y-axis)
+
+This helps us see the real data points.
+
+python
+Copy
+Edit
+plt.plot(X_test, y_pred, color='black', label='Predicted NO2')
+📌 Explanation:
+
+This draws a black line showing the predicted NO₂ values based on the model.
+
+y_pred are the values predicted using the SO₂ test data.
+
+This shows us how well the model is fitting the data (i.e., the regression line).
+
+python
+Copy
+Edit
+plt.xlabel('SO2')
+📌 Explanation:
+
+Labels the x-axis with "SO2" (Sulphur Dioxide levels)
+
+python
+Copy
+Edit
+plt.ylabel('NO2')
+📌 Explanation:
+
+Labels the y-axis with "NO2" (Nitrogen Dioxide levels)
+
+python
+Copy
+Edit
+plt.title('Linear Regression: SO2 vs NO2')
+📌 Explanation:
+
+Adds a title to the graph: 'Linear Regression: SO2 vs NO2'
+
+python
+Copy
+Edit
+plt.legend()
+📌 Explanation:
+
+Shows the legend on the plot, which helps us know which color represents actual vs predicted values.
+
+python
+Copy
+Edit
+plt.grid(True)
+📌 Explanation:
+
+Adds a grid to the background to make it easier to read and compare values.
+
+python
+Copy
+Edit
+plt.show()
+📌 Explanation:
+
+Finally, this displays the graph window.
+
 
 🎓 VIVA QUESTIONS & ANSWERS
 
