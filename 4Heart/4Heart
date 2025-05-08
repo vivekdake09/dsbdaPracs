@@ -1,0 +1,218 @@
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+ 
+
+df = pd.read_csv("Heart.csv")
+
+df.head()
+
+
+# a) Data Cleaning
+df = df.drop_duplicates()
+
+df.describe()
+
+df.info()
+
+df.isna().sum()
+
+# b) Data Integration
+df.fbs.unique()
+
+df1 = df[['age','cp','chol','thalachh']]
+
+df2 = df[['exng','slp','output']]
+
+merging=pd.concat([df1,df2],axis=1)
+merging
+
+# d) Error Correcting
+df.columns
+
+def remove_outliers(column):
+    Q1 = column.quantile(0.25)
+    Q3 = column.quantile(0.75)
+    IQR = Q3 - Q1
+    threshold = 1.5 * IQR
+    outlier_mask = (column < Q1 - threshold) | (column > Q3 + threshold)
+    return column[~outlier_mask]
+
+
+col_name = ['cp','thalachh','exng','oldpeak','slp','caa']
+for col in col_name:
+    df[col] = remove_outliers(df[col])
+
+
+df = df.dropna()
+
+df = df.drop('fbs',axis=1)
+
+x = df[['cp','thalachh','exng','oldpeak','slp','caa']]
+y = df.output
+x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.2,random_state=0)
+x_train.shape,x_test.shape,y_train.shape,y_test.shape
+
+from sklearn.preprocessing import StandardScaler
+
+# e) Data transformation
+scaler = StandardScaler()
+
+x_train_scaled = scaler.fit_transform(x_train)
+x_test_scaled = scaler.transform(x_test)
+
+# e) Data model building
+model = LogisticRegression()
+model.fit(x_train_scaled, y_train)
+
+
+# Make predictions on the test set
+y_pred = model.predict(x_test_scaled)
+
+# Evaluate the model's accuracy
+accuracy = accuracy_score(y_test, y_pred)
+print("Logistic Regression Accuracy:", accuracy)
+print("Classification Report:\n", classification_report(y_test, y_pred))
+
+
+# Classification model using Decision Tree
+from sklearn.tree import DecisionTreeClassifier
+dtc=DecisionTreeClassifier(criterion='entropy')
+dtc.fit(x_train_scaled,y_train)
+y_pred_dtc=dtc.predict(x_test_scaled)
+
+
+print("Decision Tree Accuracy:", accuracy_score(y_test, y_pred_dtc))
+print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred_dtc))
+print("Classification Report:\n", classification_report(y_test, y_pred_dtc))
+
+
+#####theory 
+import numpy as np — Imports NumPy for numerical operations.
+
+import pandas as pd — Imports pandas for data manipulation and analysis.
+
+from sklearn.model_selection import train_test_split — Used to split the dataset into training and testing sets.
+
+from sklearn.preprocessing import StandardScaler — Used to standardize (scale) the features.
+
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report — Used for evaluating model performance.
+
+from sklearn.linear_model import LogisticRegression — Imports logistic regression model.
+
+from sklearn.tree import DecisionTreeClassifier — Imports decision tree classifier.
+
+df = pd.read_csv("Heart.csv") — Reads the CSV file into a pandas DataFrame.
+
+df.head() — Displays the first 5 rows of the DataFrame.
+
+
+
+
+
+//theory
+a) Data Cleaning
+
+df.drop_duplicates() — Removes duplicate records from the data.
+
+df.describe() — Shows statistical summary like mean, min, max, etc.
+
+df.info() — Shows data types and non-null count of each column.
+
+df.isna().sum() — Checks for missing (null) values in each column.
+
+b) Data Integration
+
+df.fbs.unique() — Shows all unique values in the 'fbs' column.
+
+df1 = df[['age','cp','chol','thalachh']] — Creates first subset of selected columns.
+
+df2 = df[['exng','slp','output']] — Creates second subset.
+
+merging = pd.concat([df1, df2], axis=1) — Merges the two subsets side by side.
+
+d) Error Correcting
+
+df.columns — Lists all column names in the dataset.
+
+Defines a function remove_outliers(column) — Calculates IQR and removes data points beyond 1.5 times IQR.
+
+A list of column names is defined: ['cp','thalachh','exng','oldpeak','slp','caa']
+
+A loop applies the remove_outliers() function to each column in that list.
+
+df.dropna() — Removes any rows that now have missing values due to outlier removal.
+
+df.drop('fbs', axis=1) — Removes the 'fbs' column from the dataset.
+
+Feature Selection and Splitting
+
+x = df[['cp','thalachh','exng','oldpeak','slp','caa']] — Selects features for the model.
+
+y = df.output — Sets the target variable (output).
+
+train_test_split(x, y, test_size=0.2, random_state=0) — Splits data into 80% training and 20% testing.
+
+e) Data Transformation
+
+StandardScaler() is used — Scales features to have mean 0 and standard deviation 1.
+
+fit_transform() is applied on training data, and transform() on test data.
+
+Model Building — Logistic Regression
+
+LogisticRegression() is initialized and trained using the scaled training data.
+
+Predictions are made on test data.
+
+Accuracy and classification report (precision, recall, F1-score) are printed.
+
+Model Building — Decision Tree
+
+DecisionTreeClassifier(criterion='entropy') is used — Builds a tree using information gain.
+
+The model is trained and tested similarly.
+
+Accuracy, confusion matrix, and classification report for the decision tree are printed.
+
+📚 Viva Questions and Answers
+Q1. What is the goal of this project?
+A. To predict whether a person has heart disease using machine learning models.
+
+Q2. Why did you remove duplicates?
+A. To prevent repeated data from biasing the model and to improve training quality.
+
+Q3. What does StandardScaler do?
+A. It standardizes features to have a mean of 0 and standard deviation of 1.
+
+Q4. Why did you remove outliers?
+A. Outliers can mislead model training and reduce accuracy.
+
+Q5. What is the significance of dropping the 'fbs' column?
+A. The 'fbs' column might have been uninformative or had low variance.
+
+Q6. Why do we split data into train and test sets?
+A. To evaluate how well the model generalizes to unseen data.
+
+Q7. Why use Logistic Regression?
+A. It is simple, fast, and effective for binary classification tasks.
+
+Q8. What is the role of Decision Tree?
+A. It is a non-linear classifier that splits data based on conditions to predict outcomes.
+
+Q9. What is entropy in Decision Trees?
+A. Entropy measures impurity; lower entropy means more pure nodes.
+
+Q10. What is the confusion matrix used for?
+A. It shows the counts of true positives, false positives, true negatives, and false negatives.
+
+Q11. What does the classification report include?
+A. Precision, recall, F1-score, and support for each class.
+
+Q12. What performance metrics did you use?
+A. Accuracy, confusion matrix, precision, recall, and F1-score.
+
