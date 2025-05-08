@@ -62,6 +62,53 @@ print("\n✅ Data saved to reviews.csv")
 
 
 
+
+
+####theory :
+Purpose of the Code
+To scrape customer review data from Flipkart for a specific product (Apple iPhone 13, Blue, 128 GB).
+
+This includes the reviewer's name, rating, and written review.
+
+The data is saved into a CSV file for further analysis or reporting.
+
+📌 Applications
+Sentiment analysis of product reviews.
+
+Market research for customer feedback.
+
+Training data for NLP (Natural Language Processing) projects.
+
+Building dashboards to visualize customer opinions.
+
+Competitor analysis for e-commerce businesses.
+
+🎓 Viva Questions and Answers
+1. What is web scraping?
+Ans: Web scraping is the process of extracting data from websites using automated scripts.
+
+2. Which libraries did you use in your project?
+Ans: I used requests for fetching web pages, BeautifulSoup for parsing HTML, pandas for data handling, and time to delay between requests.
+
+3. Why do you use headers in the request?
+Ans: Headers simulate a real web browser to avoid getting blocked by the website.
+
+4. What is BeautifulSoup used for?
+Ans: BeautifulSoup is a Python library used for parsing HTML and extracting specific elements from it.
+
+5. What is the role of pandas in this project?
+Ans: Pandas is used to store the scraped data in a tabular format and export it to a CSV file.
+
+6. How can you increase the number of pages scraped?
+Ans: By changing range(1, 2) to range(1, N) where N is the number of pages you want to scrape.
+
+7. Why is time.sleep() used?
+Ans: To avoid sending too many requests too quickly, which can lead to IP blocking.
+
+8. What challenges might you face while scraping Flipkart?
+Ans: Changing HTML structure, dynamic content loading using JavaScript, and anti-bot measures like captchas.
+
+
 To scrape customer reviews, names, and ratings of the Apple iPhone 13 (Blue, 128 GB) from Flipkart and save them to a CSV file using Python, requests, BeautifulSoup, and pandas.
 
 🧾 Line-by-Line Explanation:
