@@ -72,7 +72,7 @@ Step 3:
 2 jar files import  : 
 (1) right click project > build path > add external archives > file system > usr/lib/hadoop -> hadoop-common-2.6.0-cdh5.13.0.jar
 
-(2) right click project > build path > add external archives > file system > usr/lib/hadoop-0.20-mapreduce
+(2) right click project > build path > add external archives > file system > usr/lib/hadoop-0.20-mapreduce  -> hadoop-core-2.6.0-mr1-cdh5.13.0.jar
 
 Step 4:
 Copy logfile  from url : https://mapreduceprogram.blogspot.com
