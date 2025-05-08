@@ -1,0 +1,194 @@
+import requests
+from bs4 import BeautifulSoup
+import pandas as pd
+import time
+
+
+# Base URL (without page number, which we'll add)
+base_url = "https://www.flipkart.com/apple-iphone-13-blue-128-gb/product-reviews/itm6c601e0a58b3c?page={}&pid=MOBG6VF5SMXPNQHG"
+
+
+request1 = requests.get('https://www.flipkart.com/apple-iphone-13-blue-128-gb/p/itm6c601e0a58b3c?pid=MOBG6VF5SMXPNQHG&lid=LSTMOBG6VF5SMXPNQHGL5FN51&marketplace=FLIPKART&q=iphone&store=tyy%2F4io&srno=s_1_1&otracker=search&otracker1=search&fm=organic&iid=879c0b11-c620-4bc7-bda0-ed28e3da8540.MOBG6VF5SMXPNQHG.SEARCH&ppt=clp&ppn=samsung-mobile-store&ssid=jjk9t92he80000001744810813121&qH=0b3f45b266a97d70')
+request1
+
+
+# Data containers
+data = []
+
+
+
+# Loop through first pages
+for page in range(1, 2):
+    print(f"Fetching page {page}...")
+    url = base_url.format(page)
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36'
+    }
+    
+    res = requests.get(url, headers=headers)
+    soup = BeautifulSoup(res.text, 'html.parser')
+    
+    # Extracting data
+    names = soup.find_all('p', class_='_2NsDsF AwS1CA')  # customer names
+    reviews = soup.find_all('div', class_='ZmyHeo')      # review text
+    ratings = soup.find_all('div', class_='XQDdHH Ga3i8K')  # rating stars
+    
+    for name, review, rating in zip(names, reviews, ratings):
+        data.append({
+            'Customer Name': name.get_text(strip=True),
+            'Rating': rating.get_text(strip=True),
+            'Review': review.get_text(strip=True)
+        })
+    
+    time.sleep(2)  # Be polite and avoid getting blocked
+
+# Convert to DataFrame
+df = pd.DataFrame(data)
+
+
+
+# Show customer-wise output
+for i, row in df.iterrows():
+    print(f"Customer: {row['Customer Name']}")
+    print(f"Rating: {row['Rating']}")
+    print(f"Review: {row['Review']}\n")
+
+
+
+
+# Export to CSV
+df.to_csv('reviews.csv', index=False)
+print("\n✅ Data saved to reviews.csv")
+
+
+
+To scrape customer reviews, names, and ratings of the Apple iPhone 13 (Blue, 128 GB) from Flipkart and save them to a CSV file using Python, requests, BeautifulSoup, and pandas.
+
+🧾 Line-by-Line Explanation:
+import requests
+→ Imports the requests library to send HTTP requests to web pages.
+
+from bs4 import BeautifulSoup
+→ Imports BeautifulSoup from bs4 for parsing HTML content.
+
+import pandas as pd
+→ Imports pandas for data storage and manipulation in a table-like structure (DataFrame).
+
+import time
+→ Imports time to introduce delays between page requests to avoid being blocked.
+
+base_url = "https://www.flipkart.com/apple-iphone-13-blue-128-gb/product-reviews/itm6c601e0a58b3c?page={}&pid=MOBG6VF5SMXPNQHG"
+→ This is the base URL used for scraping multiple pages. {} is a placeholder for page numbers.
+
+request1 = requests.get(...)
+→ Makes an initial HTTP request to the main product page (optional, can be used for testing).
+→ request1 stores the server's response.
+
+request1
+→ If you run this in Jupyter or an interactive shell, it returns the response object to check status.
+
+data = []
+→ Initializes an empty list to store each review (as a dictionary of name, rating, and review).
+
+✅ Main Loop (Web Scraping)
+for page in range(1, 2):
+→ Loops through the first page only (can be changed to more).
+
+print(f"Fetching page {page}...")
+→ Prints the current page number being fetched.
+
+url = base_url.format(page)
+→ Formats the base URL with the current page number.
+
+headers = { 'User-Agent': ... }
+→ Sets the headers to mimic a browser. Prevents the server from blocking the request.
+
+res = requests.get(url, headers=headers)
+→ Sends a GET request to Flipkart and stores the HTML response.
+
+soup = BeautifulSoup(res.text, 'html.parser')
+→ Parses the HTML content using BeautifulSoup.
+
+✅ Data Extraction
+names = soup.find_all('p', class_='_2NsDsF AwS1CA')
+→ Extracts customer names using the specific class name from Flipkart's HTML structure.
+
+reviews = soup.find_all('div', class_='ZmyHeo')
+→ Extracts customer review text.
+
+ratings = soup.find_all('div', class_='XQDdHH Ga3i8K')
+→ Extracts customer rating (usually 1 to 5 stars).
+
+✅ Loop Over Extracted Data
+for name, review, rating in zip(names, reviews, ratings):
+→ Loops through all reviews, combining each name, rating, and review into one record.
+
+Inside the loop:
+data.append({ 'Customer Name': ..., 'Rating': ..., 'Review': ... })
+→ Appends a dictionary containing the review info to the data list.
+
+time.sleep(2)
+→ Waits for 2 seconds before the next request. Helps to avoid being blocked (rate-limiting).
+
+✅ Create DataFrame and Save
+df = pd.DataFrame(data)
+→ Converts the data list into a pandas DataFrame for easier processing.
+
+✅ Display Output
+for i, row in df.iterrows():
+→ Iterates through each row of the DataFrame.
+
+Prints:
+
+makefile
+Copy
+Edit
+Customer: [Name]  
+Rating: [Rating]  
+Review: [Review]
+→ Displays the extracted reviews one by one.
+
+df.to_csv('reviews.csv', index=False)
+→ Saves the DataFrame into a CSV file named reviews.csv.
+
+print("\n✅ Data saved to reviews.csv")
+→ Prints a success message.
+
+🎓 Viva Questions and Answers
+Q1: What is the purpose of this code?
+A: To scrape reviews, ratings, and customer names for a product from Flipkart and save them to a CSV file.
+
+Q2: What libraries are used here and why?
+A:
+
+requests: To send HTTP requests.
+
+BeautifulSoup: To parse and extract HTML elements.
+
+pandas: To structure and export the data.
+
+time: To pause between requests to avoid server blocking.
+
+Q3: Why is a user-agent header added?
+A: To mimic a real browser and avoid being blocked by Flipkart’s anti-scraping measures.
+
+Q4: What is soup.find_all() used for?
+A: It finds all HTML elements that match the given tag and class, like customer names or reviews.
+
+Q5: How is pagination handled?
+A: The base URL includes {} which is filled in using .format(page) to go to different pages.
+
+Q6: What data is being extracted?
+A: Customer name, review rating, and the actual review text.
+
+Q7: What does zip() do in this code?
+A: It groups names, ratings, and reviews together so they can be processed in parallel.
+
+Q8: Why use time.sleep() in scraping?
+A: To avoid sending too many requests too fast, which can get your IP blocked.
+
+Q9: How is the data stored before saving?
+A: As a list of dictionaries, which is converted to a pandas DataFrame.
+
+Q10: How is the data exported?
+A: Using df.to_csv(), which saves the table to a .csv file.
