@@ -96,3 +96,152 @@ open terminal and follow following commands:
 
 
 
+
+
+//theory
+ Purpose of the Project
+The objective is to design a distributed application using Hadoop MapReduce in Java that analyzes a log file (like an access log) and counts the number of times each IP address appears. This can help determine which users (represented by IPs) accessed the system the most.
+
+📘 Line-by-Line Code Explanation
+Package and Imports
+java
+Copy
+Edit
+package prac3;
+
+import java.io.IOException;
+import java.util.StringTokenizer;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.Mapper;
+import org.apache.hadoop.mapreduce.Reducer;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+package prac3;: Declares the Java package.
+
+import ...: Brings in necessary Hadoop and Java classes for file I/O, data types, MapReduce, etc.
+
+Main Class Declaration
+java
+Copy
+Edit
+public class Process {
+Defines the main class Process.
+
+🔹 Mapper Class
+java
+Copy
+Edit
+  public static class IPMapper extends Mapper<Object, Text, Text, IntWritable>{
+IPMapper: Custom Mapper class.
+
+Mapper<KEYIN, VALUEIN, KEYOUT, VALUEOUT>: It takes a line (Text) as input and outputs (IP, 1).
+
+java
+Copy
+Edit
+    private final static IntWritable one = new IntWritable(1);
+    private Text ip = new Text();
+Defines the constant value "1" for each IP occurrence.
+
+ip is the key emitted by the Mapper.
+
+java
+Copy
+Edit
+    public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
+      StringTokenizer itr = new StringTokenizer(value.toString());
+      if (itr.hasMoreTokens()) {
+        ip.set(itr.nextToken());
+        context.write(ip, one);
+      }
+    }
+Splits each line by whitespace using StringTokenizer.
+
+Assumes the first token is the IP address.
+
+Emits (IP, 1) for each line.
+
+🔹 Reducer Class
+java
+Copy
+Edit
+  public static class IntSumReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
+    private IntWritable result = new IntWritable();
+Reducer<KEYIN, VALUEIN, KEYOUT, VALUEOUT>: Receives (IP, [1,1,1,...]) and outputs (IP, count).
+
+result: Stores the total count.
+
+java
+Copy
+Edit
+    public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
+      int sum = 0;
+      for (IntWritable val : values) {
+        sum += val.get();
+      }
+      result.set(sum);
+      context.write(key, result);
+    }
+Sums up all the 1s associated with each IP.
+
+Outputs (IP, total count).
+
+🔹 Driver Code (main method)
+java
+Copy
+Edit
+  public static void main(String[] args) throws Exception {
+    Configuration conf = new Configuration();
+    Job job = Job.getInstance(conf, "IP address count");
+Creates Hadoop job configuration.
+
+Names the job "IP address count".
+
+java
+Copy
+Edit
+    job.setJarByClass(Process.class);
+    job.setMapperClass(IPMapper.class);
+    job.setCombinerClass(IntSumReducer.class);
+    job.setReducerClass(IntSumReducer.class);
+Sets the main class, Mapper, Combiner, and Reducer classes.
+
+java
+Copy
+Edit
+    job.setOutputKeyClass(Text.class);
+    job.setOutputValueClass(IntWritable.class);
+Specifies output types for Mapper/Reducer.
+
+java
+Copy
+Edit
+    FileInputFormat.addInputPath(job, new Path(args[0]));
+    FileOutputFormat.setOutputPath(job, new Path(args[1]));
+Takes input and output paths from command line arguments.
+
+java
+Copy
+Edit
+    System.exit(job.waitForCompletion(true) ? 0 : 1);
+  }
+}
+Submits the job and exits depending on success/failure.
+
+❓ Viva Questions and Answers
+Question	Answer
+What is MapReduce?	A programming model for processing large data sets with a distributed algorithm on a cluster.
+What is the role of a Mapper?	It processes input data line by line and outputs intermediate key-value pairs.
+What does the Reducer do?	It aggregates values for the same key and produces the final output.
+What is the purpose of the Combiner?	It's an optimization that performs a local reduce before sending data to the actual Reducer.
+What does Text and IntWritable mean?	These are Hadoop's writable versions of Java's String and Integer types.
+How is the log file processed?	The Mapper extracts IPs from each log line, and the Reducer counts their occurrences.
+Why is StringTokenizer used?	To split each line into tokens to extract the IP address.
+What is the pseudo-distributed mode?	A Hadoop configuration where all daemons run on a single machine but simulate a real cluster.
+Why do we use context.write()?	To emit key-value pairs from the Mapper or Reducer.
+How can you find the IP with the longest login duration?	Count IP occurrences (as in this code) or use timestamp-based duration logic in a more advanced setup.
