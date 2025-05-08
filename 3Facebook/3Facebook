@@ -1,0 +1,256 @@
+import pandas as pd
+import numpy as np
+
+df=pd.read_csv("Facebook Metrics of Cosmetic Brand.csv")
+
+df.head()
+
+df.shape
+
+subset_1=df[['Category','Post Month','Post Weekday','Post Hour','Paid']]
+
+subset_1
+
+subset_2=df[df['Total Interactions']>500.0]
+
+subset_2
+
+subset_2.shape
+
+subset_3=df.loc[df['Total Interactions']>500,['Type','Paid']]
+
+subset_3
+
+subset_3.shape
+
+subset_4=df.iloc[10:20]
+
+subset_4
+
+subset_4.shape
+
+subset_5=df.sample(frac=0.1,random_state=1)
+
+subset_5
+
+subset_5.shape
+
+subset_6=df[(df['Total Interactions']>500)&(df['Paid']<1)]
+
+subset_6
+
+subset_6.shape
+
+submerge_1=df[['Total Interactions','share']].loc[0:4]
+
+submerge_1
+
+submerge_2=df[['share','like']].loc[3:7]
+
+submerge_2
+
+merge_inner=pd.merge(submerge_1,submerge_2,on='share',how='inner')
+
+merge_inner
+
+merge_outer=pd.merge(submerge_1,submerge_2,on='share',how='outer')
+
+merge_outer
+
+merge_left=pd.merge(submerge_1,submerge_2,on='share',how='left')
+
+merge_left
+
+merge_right=pd.merge(submerge_1,submerge_2,on='share',how='right')
+
+merge_right
+
+sort_single_asc=df.sort_values(by='Total Interactions',ascending=True)
+
+sort_single_asc
+
+sort_single_dsc=df.sort_values(by='Total Interactions',ascending=False)
+
+sort_single_dsc
+
+sort_multiple=df.sort_values(by=['share','Total Interactions'],ascending=[True,False])
+
+sort_multiple
+
+sort_index=df.sort_index(axis=0,ascending=False)
+
+sort_index
+
+df
+
+df_transposed=df.transpose()
+
+df_transposed
+
+df.shape
+
+df_melt=df.melt(id_vars=['Paid'],value_vars=['Type','Category'])
+
+df_melt
+
+df_pivot=df_melt.pivot_table(index='Paid',columns='variable',values='value',aggfunc='first')
+
+df_pivot
+
+df_stacked = df.stack()
+
+df_stacked
+
+df_unstacked=df.unstack()
+
+df_unstacked
+
+
+#######theory 
+1. import pandas as pd
+Purpose: Import pandas for data manipulation.
+Q: Why do we import pandas?
+A: To handle and analyze structured data efficiently.
+
+2. import numpy as np
+Purpose: Import NumPy for numerical operations.
+Q: Why is NumPy imported?
+A: It provides support for arrays and mathematical functions.
+
+3. df=pd.read_csv("Facebook Metrics of Cosmetic Brand.csv")
+Purpose: Load the CSV dataset into a DataFrame.
+Q: What does read_csv() do?
+A: It reads a CSV file into a DataFrame.
+
+4. df.head()
+Purpose: View first 5 rows of the dataset.
+Q: Why use head()?
+A: To preview the top rows of the dataset.
+
+5. df.shape
+Purpose: Get number of rows and columns.
+Q: What is the use of shape?
+A: It shows the dimensions of the DataFrame.
+
+6. subset_1 = df[['Category','Post Month','Post Weekday','Post Hour','Paid']]
+Purpose: Extract selected columns into a new DataFrame.
+Q: Why create column subsets?
+A: To focus analysis on relevant features.
+
+7. subset_2 = df[df['Total Interactions'] > 500.0]
+Purpose: Filter rows with more than 500 interactions.
+Q: How do you filter data in pandas?
+A: Using conditional statements on columns.
+
+8. subset_3 = df.loc[df['Total Interactions'] > 500, ['Type','Paid']]
+Purpose: Filter specific rows and columns using loc.
+Q: What is .loc[] used for?
+A: It selects rows and columns by labels.
+
+9. subset_4 = df.iloc[10:20]
+Purpose: Slice rows 10 to 19 using iloc.
+Q: How is iloc different from loc?
+A: iloc uses index positions; loc uses labels.
+
+10. subset_5 = df.sample(frac=0.1, random_state=1)
+Purpose: Randomly sample 10% of data.
+Q: What is sample() used for?
+A: For sampling data randomly, useful in training/testing splits.
+
+11. subset_6 = df[(df['Total Interactions']>500) & (df['Paid']<1)]
+Purpose: Filter data with multiple conditions.
+Q: How do you apply multiple filters?
+A: Using & (and), | (or) inside parentheses.
+
+12. submerge_1 = df[['Total Interactions','share']].loc[0:4]
+Purpose: Create subset for merge, rows 0 to 4.
+Q: Why prepare subsets for merging?
+A: To demonstrate different merge techniques.
+
+13. submerge_2 = df[['share','like']].loc[3:7]
+Purpose: Another subset to merge on 'share'.
+Q: What is the importance of common columns in merge?
+A: They act as keys for joining datasets.
+
+14–17. Merge operations (inner, outer, left, right):
+Purpose: Combine datasets in different ways.
+
+merge_inner: only matching keys
+
+merge_outer: all keys with NaNs for missing
+
+merge_left: all from left + matching right
+
+merge_right: all from right + matching left
+
+Q: Difference between inner and outer join?
+A: Inner keeps only matched records; outer includes all records with missing filled as NaN.
+
+18. sort_single_asc = df.sort_values(by='Total Interactions', ascending=True)
+Purpose: Sort data in ascending order by a column.
+Q: How do you sort data in pandas?
+A: Using sort_values().
+
+19. sort_single_dsc = df.sort_values(by='Total Interactions', ascending=False)
+Purpose: Sort data in descending order.
+
+20. sort_multiple = df.sort_values(by=['share','Total Interactions'], ascending=[True,False])
+Purpose: Sort using multiple columns with custom order.
+Q: Can you sort with multiple columns?
+A: Yes, by passing a list to by=.
+
+21. sort_index = df.sort_index(axis=0, ascending=False)
+Purpose: Sort DataFrame by index.
+Q: What does sort_index() do?
+A: It sorts rows or columns by index.
+
+22. df_transposed = df.transpose()
+Purpose: Transpose the dataset.
+Q: What is transposition?
+A: Swapping rows with columns.
+
+23. df_melt = df.melt(id_vars=['Paid'], value_vars=['Type','Category'])
+Purpose: Convert wide to long format.
+Q: What is melting in pandas?
+A: It reshapes data to long format for analysis.
+
+24. df_pivot = df_melt.pivot_table(index='Paid', columns='variable', values='value', aggfunc='first')
+Purpose: Convert long format back to wide.
+Q: What is pivot in pandas?
+A: It reshapes long data back to wide format.
+
+25. df_stacked = df.stack()
+Purpose: Stack columns into a single column.
+Q: What is stacking?
+A: Turning columns into index-based rows.
+
+26. df_unstacked = df.unstack()
+Purpose: Unstack rows back into columns.
+Q: What is unstacking?
+A: The reverse of stacking—row index becomes columns.
+
+✅ Summary of Key Viva Questions:
+Question	Short Answer
+What is a DataFrame?	2D labeled data structure in pandas.
+How to filter data?	Using conditions like df[df['col'] > value].
+What is the purpose of .loc[] and .iloc[]?	loc uses labels; iloc uses index positions.
+What is the difference between merge types?	Inner = matches only; Outer = all records; Left/Right = keep all from one side.
+What does transpose() do?	Swaps rows and columns.
+What are melt and pivot?	melt = wide to long; pivot = long to wide.
+Why use sample()?	To randomly select rows, useful for testing/training.
+What is the use of sorting?	Organizing data for readability or analysis.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
