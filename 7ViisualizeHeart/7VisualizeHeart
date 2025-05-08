@@ -1,0 +1,230 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+
+
+df=pd.read_csv('heart.csv')
+
+
+df.columns
+
+
+df
+
+
+# Bar Plot
+sns.barplot(x='sex',y='chol',data=df)
+
+
+
+sns.barplot(x='sex',y='chol',data=df,estimator=np.std)
+
+
+
+# Count Plot
+sns.countplot(x='sex',data=df)
+
+
+
+# Box Plot
+sns.boxplot(x='sex',y='chol',data=df)
+
+
+
+# Violin Plot
+sns.violinplot(x='sex',y='chol',data=df)
+
+
+
+sns.violinplot(x='sex',y='chol',data=df,hue='cp')
+
+
+
+sns.distplot(x=df['thalachh'],bins=10)
+
+
+
+sns.distplot(df['thalachh'],bins=10,kde=False)
+
+
+
+# Joint Plot
+sns.jointplot(x=df['thalachh'],y=df['sex'],kind='scatter')
+
+
+
+
+sns.jointplot(x=df['thalachh'],y=df['sex'],kind='hex')
+
+
+
+
+# The Rug Plot
+sns.rugplot(df['thalachh'])
+
+
+
+# Strip Plot
+sns.stripplot(y='thalachh',x='sex',data=df,jitter= False)
+
+
+
+
+sns.stripplot(y='thalachh',x='sex',data=df,jitter= True)
+
+
+
+sns.stripplot(x='sex',y='thalachh',data=df,jitter=True,hue='cp')
+
+
+
+# Swarm Plot
+sns.swarmplot(x='sex',y='thalachh',data=df)
+
+
+
+sns.swarmplot(x='sex',y='thalachh',data=df,hue='cp')
+
+
+
+
+df.corr()
+
+
+
+
+corr = df.corr()
+sns.heatmap(corr)
+plt.title('Correlation Heatmap')
+
+
+
+corr = df.corr()
+sns.heatmap(corr, annot=True)
+plt.title('Correlation Heatmap')
+
+
+
+######theory
+
+
+1. Import Libraries
+We use four libraries:
+
+numpy: for numerical operations like mean, standard deviation
+
+pandas: to load and manage data in a table-like format
+
+matplotlib.pyplot: to display visual graphs
+
+seaborn: for advanced and attractive data visualizations
+
+2. Load Dataset
+The dataset heart.csv is loaded using pandas.
+We check the column names using .columns and view the dataset to understand its structure.
+
+3. Bar Plot
+A bar plot is used to compare the average cholesterol (chol) level between males and females (sex).
+If we use estimator=np.std, the bar plot will show the standard deviation instead of the average.
+
+4. Count Plot
+This plot counts the number of entries per category, here showing the number of males and females in the dataset. It helps us understand the data distribution.
+
+5. Box Plot
+Box plot displays the median, quartiles, and outliers of a dataset.
+It helps us understand how chol (cholesterol) varies by gender.
+
+6. Violin Plot
+Similar to a box plot, but also shows the shape of the data distribution using curves.
+Using hue='cp', we can further break down the violin plot by chest pain type (cp).
+
+7. Distribution Plot (Distplot)
+Shows the distribution of a numeric column, such as thalachh (maximum heart rate).
+It combines a histogram with a smooth density curve (KDE).
+Using kde=False, we only see the histogram.
+
+8. Joint Plot
+Displays a scatter plot between two variables, like thalachh and sex, with histograms on the sides.
+When we use kind='hex', the plot becomes a hexbin plot, where color intensity shows data density.
+
+9. Rug Plot
+Adds small tick marks along the axis to show individual data points.
+It's usually combined with other plots.
+
+10. Strip Plot
+Shows all individual values as small dots.
+Using jitter=True spreads overlapping dots sideways.
+Adding hue='cp' shows color for different chest pain types.
+
+11. Swarm Plot
+Similar to strip plot, but adjusts dot positions to avoid overlapping, giving a clearer view.
+Can also use hue='cp' to separate categories with color.
+
+12. Correlation Matrix
+The .corr() function shows how much each pair of numeric variables is related.
+Values close to 1 mean strong positive correlation, -1 means strong negative correlation.
+
+13. Heatmap
+Displays the correlation matrix using colors.
+Using annot=True shows the actual correlation numbers on the plot.
+This helps identify which features are related to each other.
+
+Important Keywords to Remember
+
+Bar Plot: Compares averages
+
+Count Plot: Shows counts of categories
+
+Box Plot: Summarizes distribution with medians and outliers
+
+Violin Plot: Combines box plot and density curve
+
+Distplot: Shows histogram and KDE
+
+Joint Plot: Shows relationship between two variables
+
+Rug Plot: Tick marks for individual values
+
+Strip Plot: Shows all data points
+
+Swarm Plot: Smart arrangement of points to avoid overlap
+
+Heatmap: Color-coded correlation matrix
+
+Correlation: Measures how closely two variables move together
+
+Viva Questions & Answers
+
+Q: What is the purpose of a bar plot?
+A: It shows the average or other statistical measures (like standard deviation) of a variable for each category.
+
+Q: What does estimator=np.std do in a bar plot?
+A: It changes the bar plot to show standard deviation instead of the average.
+
+Q: What is the use of a count plot?
+A: It shows how many times each category appears in the data.
+
+Q: Why is a box plot useful?
+A: It helps us see the spread, median, and outliers of data.
+
+Q: How is a violin plot different from a box plot?
+A: It shows the same summary as a box plot, but also includes the data distribution shape using KDE.
+
+Q: What is KDE in distplot?
+A: KDE stands for Kernel Density Estimate, which draws a smooth curve over the histogram.
+
+Q: What does a joint plot show?
+A: It shows the relationship between two variables along with their individual distributions.
+
+Q: What is a heatmap used for?
+A: It visualizes the correlation between numerical features using colors.
+
+Q: What does a correlation value of 1 mean?
+A: It means a perfect positive correlation; the two variables increase together.
+
+Q: What is the difference between a strip plot and a swarm plot?
+A: Strip plot may have overlapping dots, while swarm plot arranges them to avoid overlap.
+
+
